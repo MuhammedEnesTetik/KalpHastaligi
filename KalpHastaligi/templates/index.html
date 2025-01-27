@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ana Sayfa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='script.js') }}">
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <h1>Kayıt ve Giriş</h1>
+        <div class="links">
+            <a href="#" id="kayit-link">Kayıt Ol</a>
+            <a href="#" id="giris-link">Giriş Yap</a>
+        </div>
+        <div id="form-container">
+            <form id="kayit-form" action="{{ url_for('kayit') }}" method="POST">
+                <h2>Kayıt Ol</h2>
+                <label for="kullanici_adi">Kullanıcı Adı</E-Posta>:</label>
+                <input type="text" id="kullanici_adi" name="kullanici_adi"> <br>
+                <label for="eposta">E-Posta</E-Posta>:</label>
+                <input type="text" id="eposta" name="eposta"> <br>
+                <label for="parola">Şifre:</label> <br>
+                <input type="password" id="parola" name="parola">
+                <button type="submit">Kayıt Ol</button>
+            </form>
+            <form id="giris-form" action="{{ url_for('giris') }}" method="POST" style="display: none;">
+                <h2>Giriş Yap</h2>
+                <label for="eposta">E-Posta:</label>
+                <input type="text" id="eposta" name="eposta"> <br>
+                <label for="parola">Şifre:</label> <br>
+                <input type="password" id="parola" name="parola">
+                <button type="submit">Giriş Yap</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('kayit-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('giris-form').style.display = 'none';
+            document.getElementById('kayit-form').style.display = 'block';
+        });
+
+        document.getElementById('giris-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('kayit-form').style.display = 'none';
+            document.getElementById('giris-form').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

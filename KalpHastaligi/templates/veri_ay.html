@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #262626;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #DC143B;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #DC143B;
+            border-radius: 6px;
+            background-color: #444;
+            color: #fff;
+            outline: none;
+        }
+
+        input[type="text"]::placeholder {
+            color: #bbb;
+        }
+
+        button {
+            background-color: #DC143B;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #b2102d;
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 25px;
+            color: #fff;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Model Prediction</h1>
+        <form action="{{ url_for('predict') }}" method="POST" id="prediction-form">
+            <label for="yaş">Yaş:</label>
+            <input type="text" id="yaş" name="yaş" placeholder="Yaşınızı girin">
+
+            <label for="cinsiyet">Cinsiyet:</label>
+            <input type="text" id="cinsiyet" name="cinsiyet" placeholder="Cinsiyetinizi girin">
+
+            <label for="gat">Göğüs Ağrısı Tipi:</label>
+            <input type="text" id="gat" name="gat" placeholder="Göğüs ağrısı tipini girin">
+            
+            <label for="kb">Kan Basıncı:</label>
+            <input type="text" id="kb" name="kb" placeholder="Kan basıncınızı girin">
+
+            <label for="kolesterol">Kolesterol:</label>
+            <input type="text" id="kolesterol" name="kolesterol" placeholder="Kolesterol seviyenizi girin">
+
+            <label for="kş">Kan Şekeri:</label>
+            <input type="text" id="kş" name="kş" placeholder="Kan şekerinizi girin">
+
+            <label for="ieds">İstirahat EDS:</label>
+            <input type="text" id="ieds" name="ieds" placeholder="İstirahat EDS değerini girin">
+
+            <label for="mka">Maks Kalp Atış:</label>
+            <input type="text" id="mka" name="mka" placeholder="Maksimum kalp atışınızı girin">
+
+            <label for="eba">Egzersize Bağlı Anjina:</label>
+            <input type="text" id="eba" name="eba" placeholder="Egzersize bağlı anjina var mı?">
+
+            <label for="estd">Egzersiz ST Depresyonu:</label>
+            <input type="text" id="estd" name="estd" placeholder="Egzersiz ST depresyonunu girin">
+
+            <label for="eğim">ST Segment Eğimi:</label>
+            <input type="text" id="eğim" name="eğim" placeholder="ST segment eğimini girin">
+
+            <button type="submit">Predict</button>
+        </form>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var yaş = document.getElementById('yaş').value;
+            var cinsiyet = document.getElementById('cinsiyet').value;
+            var gat = document.getElementById('gat').value;
+            var kb = document.getElementById('kb').value;
+            var kolesterol = document.getElementById('kolesterol').value;
+            var kş = document.getElementById('kş').value;
+            var ieds = document.getElementById('ieds').value;
+            var mka = document.getElementById('mka').value;
+            var eba = document.getElementById('eba').value;
+            var estd = document.getElementById('estd').value;
+            var eğim = document.getElementById('eğim').value;
+            
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    yaş: yaş,
+                    cinsiyet: cinsiyet,
+                    gat: gat,
+                    kb: kb,
+                    kolesterol: kolesterol,
+                    kş: kş,
+                    ieds: ieds,
+                    mka: mka,
+                    eba: eba,
+                    estd: estd,
+                    eğim: eğim
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = 'Prediction: ' + data.prediction + '\nProbability: %' + (data.probability * 100).toFixed(2);
+            });
+        });
+    </script>
+</body>
+</html>
